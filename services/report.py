@@ -5,11 +5,6 @@ from structures.base_container import BaseContainer
 
 
 class ReportWriter(BaseContainer):
-    """Пишет отчёт о сеансах работы приложения в текстовый файл в виде таблицы.
-
-    Сам отчёт — контейнер сеансов: len(report), session in report, for session in report.
-    """
-
     HEADERS = ("login", "time_in", "time_out")
 
     def __init__(self, path):
@@ -24,7 +19,6 @@ class ReportWriter(BaseContainer):
         self._path = Path(value)
 
     def load(self):
-        """Читает сеансы, которые уже записаны в файл."""
         if not self._path.exists():
             return []
         sessions = []
@@ -35,11 +29,10 @@ class ReportWriter(BaseContainer):
             try:
                 sessions.append(Session.from_row(cells))
             except ValueError:
-                continue  # испорченную строку просто пропускаем
+                continue
         return sessions
 
     def save(self, session):
-        """Добавляет сеанс к отчёту и перезаписывает файл."""
         sessions = self.load()
         sessions.append(session)
         self._path.write_text(ReportWriter.build_table(sorted(sessions)), encoding="utf-8")
@@ -72,7 +65,6 @@ class ReportWriter(BaseContainer):
         return "\n".join(lines) + "\n"
 
     def clear(self):
-        """Оставляет в файле пустую таблицу (только заголовок)."""
         self._path.write_text(ReportWriter.build_table([]), encoding="utf-8")
 
     def sort_key(self):

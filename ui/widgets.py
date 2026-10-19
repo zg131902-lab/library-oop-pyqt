@@ -11,8 +11,6 @@ from models.book import Book
 
 
 class AppButton(QPushButton):
-    """Основная кнопка: одинаковая высота и курсор-рука."""
-
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         self.setMinimumHeight(32)
@@ -20,24 +18,18 @@ class AppButton(QPushButton):
 
 
 class SecondaryButton(AppButton):
-    """Второстепенная (серая) кнопка."""
-
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         self.setObjectName("secondaryButton")
 
 
 class DangerButton(AppButton):
-    """Красная кнопка для удаления."""
-
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         self.setObjectName("dangerButton")
 
 
 class TitleLabel(QLabel):
-    """Крупный жирный заголовок."""
-
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         font = QFont()
@@ -48,8 +40,6 @@ class TitleLabel(QLabel):
 
 
 class InfoLabel(QLabel):
-    """Подпись с переносом строк."""
-
     def __init__(self, text="", parent=None):
         super().__init__(text, parent)
         self.setWordWrap(True)
@@ -58,8 +48,6 @@ class InfoLabel(QLabel):
 
 
 class TextLineEdit(QLineEdit):
-    """Поле ввода с подсказкой, ограничением длины и кнопкой очистки."""
-
     def __init__(self, placeholder="", max_length=100, parent=None):
         super().__init__(parent)
         self.setPlaceholderText(placeholder)
@@ -71,8 +59,6 @@ class TextLineEdit(QLineEdit):
 
 
 class SearchLineEdit(TextLineEdit):
-    """Поле поиска: Esc очищает строку."""
-
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.clear()
@@ -81,8 +67,6 @@ class SearchLineEdit(TextLineEdit):
 
 
 class GenreComboBox(QComboBox):
-    """Выбор жанра; может содержать первый пункт «Все жанры»."""
-
     ALL_GENRES = "Все жанры"
 
     def __init__(self, with_all=False, parent=None):
@@ -102,8 +86,6 @@ class GenreComboBox(QComboBox):
 
 
 class SortComboBox(QComboBox):
-    """Выбор порядка сортировки. Сортировка идёт через сравнение объектов (__lt__)."""
-
     BY_ID = "По номеру"
     ASCENDING = "По алфавиту (А–Я)"
     DESCENDING = "По алфавиту (Я–А)"
@@ -126,8 +108,6 @@ class SortComboBox(QComboBox):
 
 
 class EntityComboBox(QComboBox):
-    """Выпадающий список объектов (книг или читателей), хранит их номера."""
-
     def __init__(self, placeholder="", parent=None):
         super().__init__(parent)
         self.setPlaceholderText(placeholder)
@@ -147,8 +127,6 @@ class EntityComboBox(QComboBox):
 
 
 class YearSpinBox(QSpinBox):
-    """Год издания. Колесо мыши меняет значение, только если поле в фокусе."""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setRange(Book.MIN_YEAR, datetime.now().year)
@@ -164,8 +142,6 @@ class YearSpinBox(QSpinBox):
 
 
 class DataTable(QTableWidget):
-    """Таблица только для чтения, выделение целыми строками. В первом столбце — номер."""
-
     def __init__(self, headers, stretch_column=1, parent=None):
         super().__init__(0, len(headers), parent)
         self.setHorizontalHeaderLabels(list(headers))
@@ -207,8 +183,6 @@ class DataTable(QTableWidget):
 
 
 class TextList(QListWidget):
-    """Список строк."""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setAlternatingRowColors(True)
@@ -221,8 +195,6 @@ class TextList(QListWidget):
 
 
 class EntityList(TextList):
-    """Список объектов, у каждой строки запомнен номер объекта."""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -244,8 +216,6 @@ class EntityList(TextList):
 
 
 class FormGroupBox(QGroupBox):
-    """Рамка с формой: подписи выровнены по правому краю, поля растягиваются."""
-
     def __init__(self, title, parent=None):
         super().__init__(title, parent)
         layout = QFormLayout(self)
@@ -263,8 +233,6 @@ class FormGroupBox(QGroupBox):
 
 
 class AppStatusBar(QStatusBar):
-    """Строка состояния: временные сообщения слева, пользователь справа."""
-
     MESSAGE_TIMEOUT = 5000
 
     def __init__(self, parent=None):
@@ -285,8 +253,6 @@ class AppStatusBar(QStatusBar):
 
 
 class AppMenuBar(QMenuBar):
-    """Меню приложения. Наружу отдаёт сигналы, а не сами пункты меню."""
-
     exit_requested = pyqtSignal()
     about_requested = pyqtSignal()
 
@@ -302,8 +268,6 @@ class AppMenuBar(QMenuBar):
 
 
 class AppTabWidget(QTabWidget):
-    """Вкладки главного окна."""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setDocumentMode(True)
@@ -311,8 +275,6 @@ class AppTabWidget(QTabWidget):
 
 
 class MessageBox(QMessageBox):
-    """Готовые диалоги сообщений."""
-
     @staticmethod
     def info(parent, title, text):
         QMessageBox.information(parent, title, text)

@@ -11,8 +11,6 @@ from ui.widgets import (AppButton, AppMenuBar, AppStatusBar, AppTabWidget, Dange
 
 
 class MainWindow(QMainWindow):
-    """Главное окно: книги, читатели и выдача книг."""
-
     BOOK_HEADERS = ("№", "Название", "Автор", "Год", "Жанр", "Статус")
     LOAN_HEADERS = ("№", "Книга", "Читатель", "Дата выдачи")
 
@@ -33,8 +31,6 @@ class MainWindow(QMainWindow):
         self._init_tabs()
         self.refresh_all()
         self._status_bar.show_info(f"Добро пожаловать, {session.login}!")
-
-    # ---------- свойства ----------
 
     @property
     def library(self):
@@ -61,8 +57,6 @@ class MainWindow(QMainWindow):
     @report_writer.setter
     def report_writer(self, value):
         self._report_writer = value
-
-    # ---------- построение окна ----------
 
     def _init_menu(self):
         menu_bar = AppMenuBar(self)
@@ -218,8 +212,6 @@ class MainWindow(QMainWindow):
         return_button.clicked.connect(self.on_return_book)
         return page
 
-    # ---------- обновление данных ----------
-
     def refresh_all(self):
         self.refresh_books()
         self.refresh_readers()
@@ -252,8 +244,6 @@ class MainWindow(QMainWindow):
             total, issued = pair.value
             lines.append(f"{pair.key}: {total} шт., выдано {issued}")
         self._stats_list.fill_lines(lines)
-
-    # ---------- книги ----------
 
     def on_book_selected(self):
         book_id = self._books_table.selected_id()
@@ -316,8 +306,6 @@ class MainWindow(QMainWindow):
         self._year_spin.setValue(2000)
         self._genre_combo.setCurrentIndex(0)
 
-    # ---------- читатели ----------
-
     def on_reader_selected(self):
         reader_id = self._readers_list.selected_id()
         if reader_id is None:
@@ -377,8 +365,6 @@ class MainWindow(QMainWindow):
         self._name_edit.clear()
         self._phone_edit.clear()
 
-    # ---------- выдача ----------
-
     def on_issue_book(self):
         book_id = self._loan_book_combo.current_id()
         reader_id = self._loan_reader_combo.current_id()
@@ -407,8 +393,6 @@ class MainWindow(QMainWindow):
         self.refresh_all()
         self._status_bar.show_info(f"Возвращена книга {loan.book}")
 
-    # ---------- прочее ----------
-
     def show_about(self):
         MessageBox.info(self, "О программе",
                         "Учёт книг и читателей библиотеки.\n"
@@ -416,7 +400,6 @@ class MainWindow(QMainWindow):
                         "Python + PyQt5.")
 
     def save_report(self):
-        """Записывает время выхода и сохраняет отчёт (один раз)."""
         if self._report_saved:
             return
         self._session.time_out = datetime.now()

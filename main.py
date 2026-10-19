@@ -12,8 +12,6 @@ from ui.main_window import MainWindow
 
 
 class Application:
-    """Запуск приложения: окно входа, затем главное окно."""
-
     REPORT_FILE = Path(__file__).resolve().parent / "report.txt"
 
     @staticmethod

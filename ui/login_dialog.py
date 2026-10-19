@@ -8,8 +8,6 @@ from ui.widgets import AppButton, InfoLabel, MessageBox, SecondaryButton, TextLi
 
 
 class LoginDialog(QDialog):
-    """Окно входа: спрашивает логин пользователя."""
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self._login = ""

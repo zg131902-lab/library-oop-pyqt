@@ -8,25 +8,21 @@ from structures.my_map import MyMap
 
 
 class LibraryError(Exception):
-    """Ошибка бизнес-логики, текст показывается пользователю."""
+    pass
 
 
 class Library(Comparable):
-    """Каталог книг, список читателей и выданные книги."""
-
     MAX_BOOKS_PER_READER = 3
 
     def __init__(self, name="Библиотека"):
         self._name = ""
         self._books = []
         self._readers = []
-        self._loans = MyMap()  # номер книги -> выдача
+        self._loans = MyMap()
         self._next_book_id = 1
         self._next_reader_id = 1
         self._next_loan_id = 1
         self.name = name
-
-    # ---------- свойства ----------
 
     @property
     def name(self):
@@ -87,8 +83,6 @@ class Library(Comparable):
         self._loans = loans
         self._next_loan_id = max((loan.id for loan in loans.values()), default=0) + 1
 
-    # ---------- книги ----------
-
     @staticmethod
     def _find_in(items, item_id):
         for item in items:
@@ -112,7 +106,7 @@ class Library(Comparable):
 
     def update_book(self, book_id, title, author, year, genre):
         book = self.find_book(book_id)
-        changed = Book(book_id, title, author, year, genre)  # сразу проверяем все поля
+        changed = Book(book_id, title, author, year, genre)
         for other in self._books:
             if other.id != book_id and other == changed:
                 raise LibraryError(f"Книга {changed} уже есть в каталоге")
@@ -142,8 +136,6 @@ class Library(Comparable):
     def holder_of(self, book):
         loan = self._loans.get(book.id)
         return None if loan is None else loan.reader
-
-    # ---------- читатели ----------
 
     def find_reader(self, reader_id):
         reader = Library._find_in(self._readers, reader_id)
@@ -184,8 +176,6 @@ class Library(Comparable):
     def reader_loans(self, reader):
         return sorted(loan for loan in self._loans.values() if loan.reader.id == reader.id)
 
-    # ---------- выдача ----------
-
     def find_loan(self, loan_id):
         loan = Library._find_in(self._loans.values(), loan_id)
         if loan is None:
@@ -212,7 +202,6 @@ class Library(Comparable):
         return self._loans.remove(book.id)
 
     def genre_stats(self):
-        """Жанр -> (всего книг, из них выдано). Возвращает MyMap."""
         stats = MyMap()
         for genre in Book.GENRES:
             stats.put(genre, (0, 0))
@@ -221,20 +210,16 @@ class Library(Comparable):
             stats.put(book.genre, (total + 1, issued + (0 if self.is_available(book) else 1)))
         return stats
 
-    # ---------- специальные методы ----------
-
     def sort_key(self):
         return (self._name.lower(), len(self._books), len(self._readers))
 
     def __len__(self):
-        """Количество книг в каталоге."""
         return len(self._books)
 
     def __iter__(self):
         return iter(self.books)
 
     def __contains__(self, item):
-        """Можно проверить и книгу, и читателя: book in library, reader in library."""
         if isinstance(item, Book):
             return item in self._books
         if isinstance(item, Reader):
@@ -257,8 +242,6 @@ class Library(Comparable):
     def __str__(self):
         return (f"{self._name}: книг {len(self._books)}, читателей {len(self._readers)}, "
                 f"выдано {len(self._loans)}")
-
-    # ---------- тестовые данные ----------
 
     @staticmethod
     def create_demo():

@@ -4,8 +4,6 @@ from models.entity import Entity
 
 
 class Reader(Entity):
-    """Читатель библиотеки."""
-
     PHONE_PATTERN = re.compile(r"^\+?[0-9\s\-()]+$")
     MIN_PHONE_DIGITS = 10
     MAX_PHONE_DIGITS = 15
@@ -43,7 +41,6 @@ class Reader(Entity):
         return "".join(symbol for symbol in text if symbol.isdigit())
 
     def short_name(self):
-        """Фамилия и инициалы: Иванов И. И."""
         parts = self._full_name.split()
         return " ".join(parts[:1] + [part[0] + "." for part in parts[1:]])
 

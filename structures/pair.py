@@ -2,8 +2,6 @@ from models.base import Comparable
 
 
 class Pair(Comparable):
-    """Пара «ключ — значение» для MyMap."""
-
     def __init__(self, key, value):
         self._key = key
         self._value = value

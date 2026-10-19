@@ -5,8 +5,6 @@ from models.base import Comparable
 
 
 class Session(Comparable):
-    """Сеанс работы пользователя: логин, время входа и время выхода."""
-
     TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
     LOGIN_PATTERN = re.compile(r"^[A-Za-z0-9_]{3,20}$")
     EMPTY_TIME = "-"
@@ -64,7 +62,6 @@ class Session(Comparable):
 
     @staticmethod
     def from_row(cells):
-        """Создаёт сеанс из строки отчёта (login, time_in, time_out)."""
         login, time_in, time_out = cells
         time_out_value = None
         if time_out != Session.EMPTY_TIME:

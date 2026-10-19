@@ -1,6 +1,4 @@
 class Styles:
-    """Общие стили приложения (Qt Style Sheets)."""
-
     MAIN = """
     QMainWindow, QDialog {
         background: #f4f6fb;

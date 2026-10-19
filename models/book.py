@@ -4,8 +4,6 @@ from models.entity import Entity
 
 
 class Book(Entity):
-    """Книга в каталоге библиотеки."""
-
     GENRES = ("Роман", "Фантастика", "Детектив", "Поэзия", "Научная литература", "Учебник")
     MIN_YEAR = 1450
 

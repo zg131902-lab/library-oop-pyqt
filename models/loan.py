@@ -6,8 +6,6 @@ from models.reader import Reader
 
 
 class Loan(Entity):
-    """Выдача книги читателю."""
-
     DATE_FORMAT = "%d.%m.%Y %H:%M"
 
     def __init__(self, loan_id, book, reader, issued_at):

@@ -2,15 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Comparable(ABC):
-    """Абстрактный класс для объектов, которые можно сравнивать и сортировать.
-
-    Наследник обязан реализовать sort_key() — по этому ключу работают
-    операторы <, <=, >, >= и функция sorted().
-    """
-
     @abstractmethod
     def sort_key(self):
-        """Возвращает ключ, по которому объекты сравниваются."""
+        pass
 
     def _is_same_type(self, other):
         return type(self) is type(other)

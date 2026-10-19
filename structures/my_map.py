@@ -3,8 +3,6 @@ from structures.pair import Pair
 
 
 class MyMap(BaseContainer):
-    """Своё отображение «ключ — значение» на списке пар (вместо dict, он запрещён)."""
-
     def __init__(self, pairs=()):
         self._pairs = []
         self.pairs = pairs
