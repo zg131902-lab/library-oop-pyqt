@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from models.base import Comparable
 from models.book import Book
 from models.loan import Loan
 from models.reader import Reader
@@ -10,7 +11,7 @@ class LibraryError(Exception):
     """Ошибка бизнес-логики, текст показывается пользователю."""
 
 
-class Library:
+class Library(Comparable):
     """Каталог книг, список читателей и выданные книги."""
 
     MAX_BOOKS_PER_READER = 3
@@ -219,6 +220,43 @@ class Library:
             total, issued = stats.get(book.genre)
             stats.put(book.genre, (total + 1, issued + (0 if self.is_available(book) else 1)))
         return stats
+
+    # ---------- специальные методы ----------
+
+    def sort_key(self):
+        return (self._name.lower(), len(self._books), len(self._readers))
+
+    def __len__(self):
+        """Количество книг в каталоге."""
+        return len(self._books)
+
+    def __iter__(self):
+        return iter(self.books)
+
+    def __contains__(self, item):
+        """Можно проверить и книгу, и читателя: book in library, reader in library."""
+        if isinstance(item, Book):
+            return item in self._books
+        if isinstance(item, Reader):
+            return item in self._readers
+        return False
+
+    def __eq__(self, other):
+        if not isinstance(other, Library):
+            return NotImplemented
+        return (self._name == other.name and self.books == other.books
+                and self.readers == other.readers and self.loans == other.loans)
+
+    def __hash__(self):
+        return hash(self._name)
+
+    def __repr__(self):
+        return (f"Library(name={self._name!r}, books={len(self._books)}, "
+                f"readers={len(self._readers)}, loans={len(self._loans)})")
+
+    def __str__(self):
+        return (f"{self._name}: книг {len(self._books)}, читателей {len(self._readers)}, "
+                f"выдано {len(self._loans)}")
 
     # ---------- тестовые данные ----------
 

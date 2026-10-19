@@ -1,10 +1,14 @@
 from pathlib import Path
 
 from models.session import Session
+from structures.base_container import BaseContainer
 
 
-class ReportWriter:
-    """Пишет отчёт о сеансах работы приложения в текстовый файл в виде таблицы."""
+class ReportWriter(BaseContainer):
+    """Пишет отчёт о сеансах работы приложения в текстовый файл в виде таблицы.
+
+    Сам отчёт — контейнер сеансов: len(report), session in report, for session in report.
+    """
 
     HEADERS = ("login", "time_in", "time_out")
 
@@ -66,3 +70,33 @@ class ReportWriter:
         lines += [ReportWriter.format_row(row, widths) for row in rows]
         lines.append(border)
         return "\n".join(lines) + "\n"
+
+    def clear(self):
+        """Оставляет в файле пустую таблицу (только заголовок)."""
+        self._path.write_text(ReportWriter.build_table([]), encoding="utf-8")
+
+    def sort_key(self):
+        return (str(self._path),)
+
+    def __len__(self):
+        return len(self.load())
+
+    def __iter__(self):
+        return iter(self.load())
+
+    def __contains__(self, session):
+        return session in self.load()
+
+    def __eq__(self, other):
+        if not isinstance(other, ReportWriter):
+            return NotImplemented
+        return self._path == other.path
+
+    def __hash__(self):
+        return hash(self._path)
+
+    def __repr__(self):
+        return f"ReportWriter(path={str(self._path)!r})"
+
+    def __str__(self):
+        return f"Отчёт {self._path.name}"

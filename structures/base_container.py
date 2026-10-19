@@ -1,8 +1,13 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from models.base import Comparable
 
 
-class BaseContainer(ABC):
-    """Абстрактный контейнер: что должна уметь любая наша коллекция."""
+class BaseContainer(Comparable):
+    """Абстрактный контейнер: что должна уметь любая наша коллекция.
+
+    По умолчанию контейнеры сравниваются по количеству элементов.
+    """
 
     @abstractmethod
     def __len__(self):
@@ -22,3 +27,6 @@ class BaseContainer(ABC):
 
     def is_empty(self):
         return len(self) == 0
+
+    def sort_key(self):
+        return (len(self),)

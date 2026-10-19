@@ -74,6 +74,15 @@ class MyMapTest(unittest.TestCase):
         second.put(1, "x")
         self.assertEqual(first, second)
 
+    def test_compare_by_size(self):
+        small = MyMap()
+        big = MyMap()
+        small.put(1, "x")
+        big.put(1, "x")
+        big.put(2, "y")
+        self.assertTrue(small < big)
+        self.assertEqual(sorted([big, small]), [small, big])
+
 
 class LibraryTest(unittest.TestCase):
 
@@ -107,6 +116,27 @@ class LibraryTest(unittest.TestCase):
         with self.assertRaises(LibraryError):
             self.library.issue_book(6, 3)
 
+    def test_special_methods(self):
+        book = self.library.find_book(5)
+        reader = self.library.find_reader(1)
+        self.assertEqual(len(self.library), 12)
+        self.assertIn(book, self.library)
+        self.assertIn(reader, self.library)
+        self.assertEqual(list(self.library), list(self.library.books))
+        self.assertEqual(str(self.library), "Библиотека МТИ: книг 12, читателей 10, выдано 3")
+        self.assertIn("Library(name='Библиотека МТИ'", repr(self.library))
+
+    def test_compare_libraries(self):
+        first = Library("Абв")
+        second = Library("Абв")
+        for library in (first, second):
+            library.add_book("Солярис", "С. Лем", 1961, "Фантастика")
+        self.assertEqual(first, second)
+        second.add_reader("Иванов Иван", "+7 914 100-20-30")
+        self.assertNotEqual(first, second)
+        self.assertTrue(first < second)
+        self.assertTrue(Library("Абв") < Library("Где"))
+
 
 class ReportTest(unittest.TestCase):
 
@@ -121,6 +151,21 @@ class ReportTest(unittest.TestCase):
             self.assertTrue(lines[1].startswith("| login"))
             self.assertIn("| student | 14.10.2026 10:00:00 | 14.10.2026 10:05:00 |", lines)
             self.assertEqual(len(writer.load()), 2)
+
+    def test_report_as_container(self):
+        with tempfile.TemporaryDirectory() as folder:
+            writer = ReportWriter(Path(folder) / "report.txt")
+            self.assertTrue(writer.is_empty())
+            session = Session("student", datetime(2026, 10, 14, 10, 0, 0),
+                              datetime(2026, 10, 14, 10, 5, 0))
+            writer.save(session)
+            self.assertEqual(len(writer), 1)
+            self.assertIn(session, writer)
+            self.assertEqual(list(writer), [session])
+            self.assertEqual(writer, ReportWriter(Path(folder) / "report.txt"))
+            self.assertEqual(str(writer), "Отчёт report.txt")
+            writer.clear()
+            self.assertEqual(len(writer), 0)
 
 
 if __name__ == "__main__":
